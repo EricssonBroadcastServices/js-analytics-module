@@ -1,10 +1,28 @@
 {
   "name": "js-analytics-module",
   "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "type": "commonjs",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist",
+    "lint": "npx eslint ."
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/lodash.throttle": "^4.1.9",
+    "@types/react": "^19.2.7",
     "@typescript-eslint/eslint-plugin": "^8.49.0",
     "@typescript-eslint/parser": "^8.49.0",
     "eslint": "^9.39.1",
@@ -17,13 +35,19 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.49.0"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/EricssonBroadcastServices/js-analytics-module.git"
   },
-  "keywords": [],
-  "license": "MIT"
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@ericssonbroadcastservices/rbm-ott-sdk": "0.11.0",
+    "bitmovin-player": "8.225.0",
+    "lodash.throttle": "4.1.1",
+    "react": "17.0.1",
+    "mitt": "3.0.0"
+  }
 }
