@@ -1,1 +1,1 @@
-export * from "./web/useWebAnalitycs";
+export * from "./web/webAnalitycs";
