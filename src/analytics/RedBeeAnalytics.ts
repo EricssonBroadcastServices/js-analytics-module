@@ -4,15 +4,16 @@
 import { LogLevel, Logger } from "../utils/Logger";
 import { CreatedOptions, IDeviceStats, TDeviceModel } from "../types/types";
 import { ClockOffsetProvider } from "./ClockOffsetProvider";
-import { getDeviceId } from "../utils/helpers";
 import { EVENT_POOL_SEND, EventPool, IPayload } from "./EventPool";
-import { PlayerEvent } from "../web/types";
+import { PlayerEvent } from "../types/types";
+import { isWebEnvironment } from "../utils/helpers";
 
 const DEFAULT_HEADERS = {
   "content-type": "application/json",
 };
 
 const referrer = (): string => {
+  if (!isWebEnvironment()) return "";
   if (document.referrer) return document.referrer;
   if (window.self === window.top) return "";
   // if in an iframe we want to get the parent page url
@@ -24,9 +25,14 @@ const referrer = (): string => {
   }
 };
 
+const getPageUrl = (): string => {
+  if (!isWebEnvironment()) return "";
+  return window.location.href;
+};
+
 const DEFAULT_DEVICE: Partial<IDeviceInfo> = {
   appType: "browser",
-  pageUrl: window.location.href,
+  pageUrl: getPageUrl(),
   referrer: referrer(),
 };
 
@@ -197,11 +203,12 @@ export class RedBeeAnalytics {
     if (!this.isActive()) {
       return;
     }
+    const isWeb = isWebEnvironment();
     const deviceInfoEvent = {
       EventType: "Device.Info",
-      Height: window.screen ? window.screen.height : 0,
-      Width: window.screen ? window.screen.width : 0,
-      Name: window.navigator ? window.navigator.product : "",
+      Height: isWeb && window.screen ? window.screen.height : 0,
+      Width: isWeb && window.screen ? window.screen.width : 0,
+      Name: isWeb && window.navigator ? window.navigator.product : "",
       ...this.getDefaultFields(),
     };
 

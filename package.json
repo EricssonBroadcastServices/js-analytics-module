@@ -5,6 +5,7 @@
   "type": "commonjs",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "react-native": "./dist/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "clean": "rm -rf dist",
@@ -12,6 +13,8 @@
   },
   "exports": {
     ".": {
+      "react-native": "./dist/index.js",
+      "require": "./dist/index.js",
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     }
@@ -19,6 +22,10 @@
   "files": [
     "dist"
   ],
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-native": ">=0.73.0"
+  },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "@types/lodash.throttle": "^4.1.9",
@@ -33,7 +40,9 @@
     "prettier": "^3.7.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.49.0"
+    "typescript-eslint": "^8.49.0",
+    "react": "^18.2.0",
+    "react-native": "0.72.x"
   },
   "repository": {
     "type": "git",
@@ -47,7 +56,6 @@
     "@ericssonbroadcastservices/rbm-ott-sdk": "0.11.0",
     "bitmovin-player": "8.225.0",
     "lodash.throttle": "4.1.1",
-    "react": "17.0.1",
     "mitt": "3.0.0"
   }
 }

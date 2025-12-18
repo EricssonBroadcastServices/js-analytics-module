@@ -6,6 +6,7 @@ import throttle from "lodash.throttle";
 
 import { Logger } from "../utils/Logger";
 import { EmitterBaseClass } from "./EmitterBaseClass";
+import { isWebEnvironment } from "../utils/helpers";
 
 export interface IPayload {
   EventType: string;
@@ -34,19 +35,20 @@ export class EventPool extends EmitterBaseClass<{
 
     this.updateInterval(3000); // we use this as default, if we don't get a interval from the backend
 
-    document.addEventListener("visibilitychange", this.queueDispatcher, {
-      capture: true,
-    });
-    document.addEventListener("pagehide", this.queueDispatcher, {
-      capture: true,
-    });
+    if (isWebEnvironment()) {
+      document.addEventListener("visibilitychange", this.queueDispatcher, {
+        capture: true,
+      });
+      document.addEventListener("pagehide", this.queueDispatcher, {
+        capture: true,
+      });
+    }
   }
 
   updateInterval(interval: number) {
     // Handle seconds coming in, modify to milliseconds
     const redefinedInterval =
       interval.toString().length < 4 ? Number(interval * 1000) : interval;
-    console.log("interval", redefinedInterval);
     this.dispatcher = throttle(this.queueDispatcher, redefinedInterval, {
       leading: false,
       trailing: true,
@@ -57,7 +59,6 @@ export class EventPool extends EmitterBaseClass<{
     this.sequenceNumber++;
     payload.SequenceNumber = this.sequenceNumber;
     this.logger.debug("Analytics added to pool", this.sessionId, payload);
-    console.log("payloadQueue", this.payloadQueue);
     this.payloadQueue.push(payload);
 
     if (forceDispatch) {
@@ -68,7 +69,9 @@ export class EventPool extends EmitterBaseClass<{
   }
 
   queueDispatcher() {
-    if (!navigator.onLine || !this.payloadQueue.length) {
+    const isOnline =
+      typeof navigator !== "undefined" && navigator.onLine !== false;
+    if (!isOnline || !this.payloadQueue.length) {
       return;
     }
     const queue = this.payloadQueue.sort((a, b) => a.TimeStamp - b.TimeStamp);
@@ -78,8 +81,10 @@ export class EventPool extends EmitterBaseClass<{
   }
 
   public destroy() {
-    document.removeEventListener("visibilitychange", this.queueDispatcher);
-    document.removeEventListener("pagehide", this.queueDispatcher);
+    if (isWebEnvironment()) {
+      document.removeEventListener("visibilitychange", this.queueDispatcher);
+      document.removeEventListener("pagehide", this.queueDispatcher);
+    }
     this.dispatcher.flush();
     super.destroy();
   }

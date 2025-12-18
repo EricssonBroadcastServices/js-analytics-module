@@ -1,24 +1,12 @@
-import { PlayerAPI } from "bitmovin-player";
-import { PlayerEvent } from "./types";
-import {
-  IRedBeeAnalyticsOptions,
-  RedBeeAnalytics,
-} from "../analytics/RedBeeAnalytics";
-import { CreatedOptions } from "../types/types";
-
-type Props = {
-  options: IRedBeeAnalyticsOptions;
-  createdOptions: CreatedOptions;
-  player: PlayerAPI;
-  sessionId: string;
-};
+import { AnalyticsWebProps, PlayerEvent } from "../types/types";
+import { RedBeeAnalytics } from "../analytics/RedBeeAnalytics";
 
 export const webAnalytics = ({
   options,
   createdOptions,
   player,
   sessionId,
-}: Props) => {
+}: AnalyticsWebProps) => {
   const redBeeAnalytics = new RedBeeAnalytics(options);
 
   redBeeAnalytics.init(sessionId);

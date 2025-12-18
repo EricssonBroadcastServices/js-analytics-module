@@ -28,7 +28,8 @@ export class ClockOffsetProvider {
     if (exposureBaseUrl) {
       this.setupPeriodicalSync();
     } else {
-      this.lastSyncBrowserTime = performance.now();
+      this.lastSyncBrowserTime =
+        typeof performance !== "undefined" ? performance.now() : Date.now();
       this.lastSyncLocalTime = Date.now();
       this.clockOffset = 0;
     }
@@ -63,7 +64,9 @@ export class ClockOffsetProvider {
       await this.sleep(RETRY_SYNC_INTERVAL_MS / 3);
     }
     const elapsedLocalTime = Date.now() - this.lastSyncLocalTime;
-    const elapsedBrowserTime = performance.now() - this.lastSyncBrowserTime;
+    const currentTime =
+      typeof performance !== "undefined" ? performance.now() : Date.now();
+    const elapsedBrowserTime = currentTime - this.lastSyncBrowserTime;
     const currentClockOffset = Math.round(
       this.clockOffset + (elapsedLocalTime - elapsedBrowserTime),
     );
@@ -77,7 +80,9 @@ export class ClockOffsetProvider {
 
   private async updateClockOffset(): Promise<boolean | void> {
     if (!this.exposureBaseUrl) return;
-    this.lastSyncBrowserTime = performance.now();
+    const currentTime =
+      typeof performance !== "undefined" ? performance.now() : Date.now();
+    this.lastSyncBrowserTime = currentTime;
     this.lastSyncLocalTime = Date.now();
     return getTimeAnonymous
       .call({
@@ -85,7 +90,9 @@ export class ClockOffsetProvider {
       })
       .then((resp) => {
         let lastSyncServerTime = resp.epochMillis;
-        const roundTripTime = performance.now() - this.lastSyncBrowserTime;
+        const endTime =
+          typeof performance !== "undefined" ? performance.now() : Date.now();
+        const roundTripTime = endTime - this.lastSyncBrowserTime;
         lastSyncServerTime -= Math.round(0.5 * roundTripTime);
         this.lastSyncLocalTime += Math.round(0.5 * roundTripTime);
         this.lastSyncBrowserTime += 0.5 * roundTripTime;

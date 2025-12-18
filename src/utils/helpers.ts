@@ -43,3 +43,7 @@ export const getDeviceId = (sessionToken?: string): string | undefined => {
   }
   return deviceId;
 };
+
+export const isWebEnvironment = (): boolean => {
+  return typeof window !== "undefined" && typeof document !== "undefined";
+};
