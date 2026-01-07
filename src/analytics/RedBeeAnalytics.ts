@@ -1,12 +1,10 @@
-// SPDX-FileCopyrightText: 2024 Red Bee Media Ltd <https://www.redbeemedia.com/>
-//
-// SPDX-License-Identifier: MIT
 import { LogLevel, Logger } from "../utils/Logger";
 import { CreatedOptions, IDeviceStats, TDeviceModel } from "../types/types";
 import { ClockOffsetProvider } from "./ClockOffsetProvider";
 import { EVENT_POOL_SEND, EventPool, IPayload } from "./EventPool";
 import { PlayerEvent } from "../types/types";
 import { isWebEnvironment } from "../utils/helpers";
+import { NetInfoStateType } from "@react-native-community/netinfo";
 
 const DEFAULT_HEADERS = {
   "content-type": "application/json",
@@ -16,8 +14,6 @@ const referrer = (): string => {
   if (!isWebEnvironment()) return "";
   if (document.referrer) return document.referrer;
   if (window.self === window.top) return "";
-  // if in an iframe we want to get the parent page url
-  // window.top can throw an error ( just by accessing it! ) so it needs to be wrapped.
   try {
     return window.top?.location.href ?? "";
   } catch (e) {
@@ -255,6 +251,28 @@ export class RedBeeAnalytics {
 
     const payload = {
       EventType: eventType,
+      ...this.getDefaultFields(),
+    };
+
+    this.eventPool?.add(payload);
+  }
+
+  runConnectionEvent({
+    eventType,
+    connectionType,
+  }: {
+    eventType: string;
+    connectionType: NetInfoStateType;
+    startTime?: number;
+  }): void {
+    if (!this.isActive()) {
+      return;
+    }
+    this.logger.debug("[Event]: " + eventType, this.sessionId);
+
+    const payload = {
+      EventType: eventType,
+      connectionType,
       ...this.getDefaultFields(),
     };
 

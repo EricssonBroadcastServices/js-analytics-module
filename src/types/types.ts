@@ -149,7 +149,7 @@ type AnalyticsBaseProps = {
 };
 
 export type AnalyticsWebProps = AnalyticsBaseProps & {
-  player: PlayerAPI;
+  player?: PlayerAPI;
 };
 
 export type AnalyticsRNProps = AnalyticsBaseProps & {

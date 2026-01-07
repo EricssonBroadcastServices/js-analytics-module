@@ -2,6 +2,7 @@ import { AnalyticsRNProps, PlayerEvent } from "../types/types";
 import { RedBeeAnalytics } from "../analytics/RedBeeAnalytics";
 import { useMemo, useEffect } from "react";
 import { CallbackMap } from "./types";
+import { useNetInfo } from "@react-native-community/netinfo";
 
 const allPossibleCallbacks: (keyof CallbackMap)[] = [
   "onAdBreakFinished",
@@ -73,15 +74,22 @@ export const useRNAnalytics = ({
   sessionId,
   callbacks: callbacksProps,
 }: AnalyticsRNProps) => {
+  const { type } = useNetInfo();
   const redBeeAnalytics = useMemo(
     () => new RedBeeAnalytics(options),
     [options],
   );
-
   useEffect(() => {
     redBeeAnalytics.init(sessionId);
     redBeeAnalytics.created(createdOptions);
   }, [redBeeAnalytics, sessionId, createdOptions]);
+
+  useEffect(() => {
+    redBeeAnalytics.runConnectionEvent({
+      eventType: "ConnectionTypeChange",
+      connectionType: type,
+    });
+  }, [type]);
 
   const wrappedCalbacks = useMemo(() => {
     const callbacks: CallbackMap = {};
