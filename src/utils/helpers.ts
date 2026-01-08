@@ -38,9 +38,7 @@ export const getDeviceId = (sessionToken?: string): string | undefined => {
 
   try {
     localStorage.setItem(DUID_STORAGE_KEY, deviceId);
-  } catch (e) {
-    // no-op
-  }
+  } catch (e) {}
   return deviceId;
 };
 

@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2024 Red Bee Media Ltd <https://www.redbeemedia.com/>
-//
-// SPDX-License-Identifier: MIT
-
 import throttle from "lodash.throttle";
 
 import { Logger } from "../utils/Logger";
@@ -33,7 +29,7 @@ export class EventPool extends EmitterBaseClass<{
 
     this.queueDispatcher = this.queueDispatcher.bind(this);
 
-    this.updateInterval(3000); // we use this as default, if we don't get a interval from the backend
+    this.updateInterval(3000);
 
     if (isWebEnvironment()) {
       document.addEventListener("visibilitychange", this.queueDispatcher, {

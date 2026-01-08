@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2024 Red Bee Media Ltd <https://www.redbeemedia.com/>
-//
-// SPDX-License-Identifier: MIT
-
 import { getTimeAnonymous } from "@ericssonbroadcastservices/rbm-ott-sdk";
 
 const SYNC_INTERVAL_MS = 30 * 60 * 1000; // 30 minutes
@@ -17,11 +13,6 @@ export class ClockOffsetProvider {
   private clockOffset = 0;
   private isInitSyncing = false;
 
-  // When exposoreBaseUrl is provided, clock offsets are calculated as the difference between Date.now() (LocalTime)
-  // and server time, as follows: ServerTime = LocalTime - ClockOffset
-  // If exposureBaseUrl is undefined, the calculated clock offsets will be relative to navigation time.
-  // Navigation time equals to performance.timeOrigin + performance.now(), a time that is not impacted
-  // by system and user clock adjustments, clock skew, etc
   constructor(exposureBaseUrl?: string) {
     this.exposureBaseUrl = exposureBaseUrl;
 

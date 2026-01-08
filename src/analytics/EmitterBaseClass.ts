@@ -59,8 +59,6 @@ export class EmitterBaseClass<Events extends Record<string, unknown>> {
     this.emitter?.on("*", allHandler);
   }
 
-  // public onAllTest();
-
   public off<Key extends keyof Events>(
     event: Key,
     handler?: Handler<Events[Key]>,
