@@ -49,6 +49,8 @@ export type TDeviceModel =
   | TCastModel;
 
 export enum PlayerEvent {
+  AppResumed = "appresumed",
+  AppBackgrounded = "appbackgrounded",
   AdBreakFinished = "adbreakfinished",
   AdBreakStarted = "adbreakstarted",
   AdClicked = "adclicked",

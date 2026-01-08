@@ -3,6 +3,7 @@ import { RedBeeAnalytics } from "../analytics/RedBeeAnalytics";
 import { useMemo, useEffect } from "react";
 import { CallbackMap } from "./types";
 import { useNetInfo } from "@react-native-community/netinfo";
+import { AppState } from "react-native";
 
 const allPossibleCallbacks: (keyof CallbackMap)[] = [
   "onAdBreakFinished",
@@ -90,6 +91,27 @@ export const useRNAnalytics = ({
       connectionType: type,
     });
   }, [type]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (nextAppState === "active") {
+        redBeeAnalytics.runEvent({
+          eventType: PlayerEvent.AppResumed,
+        });
+        return;
+      }
+      if (nextAppState === "background") {
+        redBeeAnalytics.runEvent({
+          eventType: PlayerEvent.AppBackgrounded,
+        });
+        return;
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
 
   const wrappedCalbacks = useMemo(() => {
     const callbacks: CallbackMap = {};
