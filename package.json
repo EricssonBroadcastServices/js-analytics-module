@@ -1,0 +1,61 @@
+{
+  "name": "js-analytics-module",
+  "version": "0.1.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "react-native": "./dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist",
+    "lint": "npx eslint ."
+  },
+  "exports": {
+    ".": {
+      "react-native": "./dist/index.js",
+      "require": "./dist/index.js",
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-native": ">=0.73.0",
+    "@react-native-community/netinfo": "11.4.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/lodash.throttle": "^4.1.9",
+    "@types/react": "^19.2.7",
+    "@typescript-eslint/eslint-plugin": "^8.49.0",
+    "@typescript-eslint/parser": "^8.49.0",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^16.5.0",
+    "jiti": "^2.6.1",
+    "prettier": "^3.7.4",
+    "react-native": "0.72.x",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.49.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EricssonBroadcastServices/js-analytics-module.git"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@ericssonbroadcastservices/rbm-ott-sdk": "0.11.0",
+    "bitmovin-player": "8.225.0",
+    "lodash.throttle": "4.1.1",
+    "mitt": "3.0.0"
+  }
+}
