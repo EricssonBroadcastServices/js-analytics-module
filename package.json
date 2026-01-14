@@ -1,5 +1,5 @@
 {
-  "name": "js-analytics-module",
+  "name": "@ericssonbroadcastservices/js-analytics-module",
   "version": "0.1.0",
   "private": true,
   "type": "commonjs",
@@ -7,6 +7,7 @@
   "types": "./dist/index.d.ts",
   "react-native": "./dist/index.js",
   "scripts": {
+    "custom-publish": "npm publish",
     "build": "tsc -p tsconfig.build.json",
     "clean": "rm -rf dist",
     "lint": "npx eslint ."
@@ -44,6 +45,9 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.49.0"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/EricssonBroadcastServices/js-analytics-module.git"
@@ -57,5 +61,22 @@
     "bitmovin-player": "8.225.0",
     "lodash.throttle": "4.1.1",
     "mitt": "3.0.0"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release ${version}",
+      "tagName": "v${version}"
+    },
+    "npm": {
+      "publish": true
+    },
+    "github": {
+      "release": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": "angular"
+      }
+    }
   }
 }
