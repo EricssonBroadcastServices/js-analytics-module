@@ -1,6 +1,6 @@
 {
   "name": "@ericssonbroadcastservices/js-analytics-module",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "commonjs",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -25,8 +25,7 @@
   ],
   "peerDependencies": {
     "react": ">=18.2.0",
-    "react-native": ">=0.73.0",
-    "@react-native-community/netinfo": "11.4.1"
+    "react-native": ">=0.73.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -58,6 +57,7 @@
   "license": "MIT",
   "dependencies": {
     "@ericssonbroadcastservices/rbm-ott-sdk": "0.11.0",
+    "@react-native-community/netinfo": "11.4.1",
     "bitmovin-player": "8.225.0",
     "lodash.throttle": "4.1.1",
     "mitt": "3.0.0"
