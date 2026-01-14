@@ -1,7 +1,6 @@
 {
   "name": "js-analytics-module",
   "version": "0.1.0",
-  "private": true,
   "type": "commonjs",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -9,7 +8,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "clean": "rm -rf dist",
-    "lint": "npx eslint ."
+    "lint": "npx eslint .",
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "exports": {
     ".": {

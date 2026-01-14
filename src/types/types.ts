@@ -48,9 +48,12 @@ export type TDeviceModel =
   | TLGTVModel
   | TCastModel;
 
-export enum PlayerEvent {
+export enum ExtraEvents {
   AppResumed = "appresumed",
   AppBackgrounded = "appbackgrounded",
+}
+
+export enum PlayerEvent {
   AdBreakFinished = "adbreakfinished",
   AdBreakStarted = "adbreakstarted",
   AdClicked = "adclicked",
