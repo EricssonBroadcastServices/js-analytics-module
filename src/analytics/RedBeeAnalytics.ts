@@ -1,10 +1,5 @@
 import { LogLevel, Logger } from "../utils/Logger";
-import {
-  CreatedOptions,
-  ExtraEvents,
-  IDeviceStats,
-  TDeviceModel,
-} from "../types/types";
+import { CreatedOptions, ExtraEvents, IDeviceStats } from "../types/types";
 import { ClockOffsetProvider } from "./ClockOffsetProvider";
 import { EVENT_POOL_SEND, EventPool, IPayload } from "./EventPool";
 import { PlayerEvent } from "../types/types";
@@ -52,7 +47,7 @@ interface IPlayerFields {
 export interface IDeviceInfo {
   os: string;
   osVersion: string;
-  model: TDeviceModel;
+  model: string;
   modelNumber?: string;
   manufacturer: string;
   appType: "samsung_tv" | "lg_tv" | "chromecast" | "browser";
@@ -193,9 +188,7 @@ export class RedBeeAnalytics {
     this.logger.debug("init", sessionId);
     this.clear();
     this.sessionId = sessionId;
-    console.log("eventPool", this.sessionId);
     this.eventPool = new EventPool(sessionId, this.logger);
-    console.log("eventPool", this.eventPool);
     this.eventPool.on(EVENT_POOL_SEND, this._send.bind(this));
     return true;
   }
@@ -210,6 +203,24 @@ export class RedBeeAnalytics {
       Height: isWeb && window.screen ? window.screen.height : 0,
       Width: isWeb && window.screen ? window.screen.width : 0,
       Name: isWeb && window.navigator ? window.navigator.product : "",
+      DeviceModel: this.device.model,
+      DeviceStats: this.device.deviceStats,
+      Manufacturer: this.device.manufacturer,
+      AppType: this.device.appType,
+      PageUrl: this.device.pageUrl,
+      Referrer: this.device.referrer,
+      OS: this.device.os,
+      OSVersion: this.device.osVersion,
+      TotalNumberOfDroppedFrames: 0,
+      Player: this.playerFields.Player,
+      Version: this.playerFields.Version,
+      Technology: this.playerFields.Technology,
+      TechVersion: this.playerFields.TechVersion,
+      StreamingTechnology: this.playerFields.StreamingTechnology,
+      CDNVendor: this.playerFields.CDNVendor,
+      AnalyticsPostInterval: this.playerFields.AnalyticsPostInterval,
+      AnalyticsBucket: this.playerFields.AnalyticsBucket,
+      AnalyticsTag: this.playerFields.AnalyticsTag,
       ...this.getDefaultFields(),
     };
 
