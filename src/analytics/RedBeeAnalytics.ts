@@ -1,5 +1,10 @@
 import { LogLevel, Logger } from "../utils/Logger";
-import { CreatedOptions, IDeviceStats, TDeviceModel } from "../types/types";
+import {
+  CreatedOptions,
+  ExtraEvents,
+  IDeviceStats,
+  TDeviceModel,
+} from "../types/types";
 import { ClockOffsetProvider } from "./ClockOffsetProvider";
 import { EVENT_POOL_SEND, EventPool, IPayload } from "./EventPool";
 import { PlayerEvent } from "../types/types";
@@ -241,7 +246,7 @@ export class RedBeeAnalytics {
   runEvent({
     eventType,
   }: {
-    eventType: PlayerEvent;
+    eventType: PlayerEvent | ExtraEvents;
     startTime?: number;
   }): void {
     if (!this.isActive()) {

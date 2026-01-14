@@ -1,4 +1,4 @@
-import { AnalyticsRNProps, PlayerEvent } from "../types/types";
+import { AnalyticsRNProps, ExtraEvents, PlayerEvent } from "../types/types";
 import { RedBeeAnalytics } from "../analytics/RedBeeAnalytics";
 import { useMemo, useEffect } from "react";
 import { CallbackMap } from "./types";
@@ -96,13 +96,13 @@ export const useRNAnalytics = ({
     const subscription = AppState.addEventListener("change", (nextAppState) => {
       if (nextAppState === "active") {
         redBeeAnalytics.runEvent({
-          eventType: PlayerEvent.AppResumed,
+          eventType: ExtraEvents.AppResumed,
         });
         return;
       }
       if (nextAppState === "background") {
         redBeeAnalytics.runEvent({
-          eventType: PlayerEvent.AppBackgrounded,
+          eventType: ExtraEvents.AppBackgrounded,
         });
         return;
       }
