@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 2026 Red Bee Media Ltd <https://www.redbeemedia.com/\>
+//
+// SPDX-License-Identifier: MIT
+
 const DUID_STORAGE_KEY = "deviceId";
 
 const generateS4 = () => {

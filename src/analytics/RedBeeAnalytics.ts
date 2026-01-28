@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 2026 Red Bee Media Ltd <https://www.redbeemedia.com/\>
+//
+// SPDX-License-Identifier: MIT
+
 import { LogLevel, Logger } from "../utils/Logger";
 import { CreatedOptions, ExtraEvents, IDeviceStats } from "../types/types";
 import { ClockOffsetProvider } from "./ClockOffsetProvider";

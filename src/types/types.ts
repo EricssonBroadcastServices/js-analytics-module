@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 2026 Red Bee Media Ltd <https://www.redbeemedia.com/\>
+//
+// SPDX-License-Identifier: MIT
+
 import { PlayerAPI } from "bitmovin-player";
 import { IRedBeeAnalyticsOptions } from "../analytics/RedBeeAnalytics";
 import { CallbackMap } from "../react-native/types";
