@@ -77,13 +77,15 @@ export const useRNAnalytics = ({
 }: AnalyticsRNProps) => {
   const { type } = useNetInfo();
   const redBeeAnalytics = useMemo(
-    () => new RedBeeAnalytics(options),
-    [options],
+    () => new RedBeeAnalytics({ ...options, sessionId }),
+    [],
   );
   useEffect(() => {
-    redBeeAnalytics.init(sessionId);
     redBeeAnalytics.created(createdOptions);
-  }, [redBeeAnalytics, sessionId, createdOptions]);
+    return () => {
+      redBeeAnalytics.destroy();
+    };
+  }, []);
 
   useEffect(() => {
     redBeeAnalytics.runConnectionEvent({

@@ -1,5 +1,3 @@
-import throttle from "lodash.throttle";
-
 import { Logger } from "../utils/Logger";
 import { EmitterBaseClass } from "./EmitterBaseClass";
 import { isWebEnvironment } from "../utils/helpers";
@@ -13,6 +11,8 @@ export interface IPayload {
 export const EVENT_POOL_SEND = "eventpool:send";
 type EVENT_POOL_SEND = typeof EVENT_POOL_SEND;
 
+const DISPATCH_INTERVAL_MS = 60000;
+
 export class EventPool extends EmitterBaseClass<{
   [EVENT_POOL_SEND]: IPayload[];
 }> {
@@ -20,16 +20,19 @@ export class EventPool extends EmitterBaseClass<{
   private sequenceNumber = 0;
   private logger: Logger;
   private payloadQueue: IPayload[] = [];
-  private dispatcher: any;
+  private dispatchIntervalId: ReturnType<typeof setInterval> | null = null;
 
-  constructor(sessionId: string, logger: Logger) {
+  constructor(sessionId: string, logger: Logger, interval?: number) {
     super();
     this.sessionId = sessionId;
     this.logger = logger;
 
     this.queueDispatcher = this.queueDispatcher.bind(this);
 
-    this.updateInterval(3000);
+    this.dispatchIntervalId = setInterval(
+      this.queueDispatcher,
+      interval || DISPATCH_INTERVAL_MS,
+    );
 
     if (isWebEnvironment()) {
       document.addEventListener("visibilitychange", this.queueDispatcher, {
@@ -41,26 +44,22 @@ export class EventPool extends EmitterBaseClass<{
     }
   }
 
-  updateInterval(interval: number) {
-    // Handle seconds coming in, modify to milliseconds
-    const redefinedInterval =
-      interval.toString().length < 4 ? Number(interval * 1000) : interval;
-    this.dispatcher = throttle(this.queueDispatcher, redefinedInterval, {
-      leading: false,
-      trailing: true,
-    });
-  }
-
   add(payload: IPayload, forceDispatch = false) {
+    if (payload.EventType === "timechanged") {
+      const existingIndex = this.payloadQueue.findIndex(
+        (p) => p.EventType === "timechanged",
+      );
+      if (existingIndex !== -1) {
+        this.payloadQueue.splice(existingIndex, 1);
+      }
+    }
     this.sequenceNumber++;
-    payload.SequenceNumber = this.sequenceNumber;
+    payload.SequenceNumber = this.payloadQueue.length + 1;
     this.logger.debug("Analytics added to pool", this.sessionId, payload);
     this.payloadQueue.push(payload);
 
     if (forceDispatch) {
       this.queueDispatcher();
-    } else {
-      this.dispatcher();
     }
   }
 
@@ -77,11 +76,14 @@ export class EventPool extends EmitterBaseClass<{
   }
 
   public destroy() {
+    if (this.dispatchIntervalId !== null) {
+      clearInterval(this.dispatchIntervalId);
+      this.dispatchIntervalId = null;
+    }
     if (isWebEnvironment()) {
       document.removeEventListener("visibilitychange", this.queueDispatcher);
       document.removeEventListener("pagehide", this.queueDispatcher);
     }
-    this.dispatcher.flush();
     super.destroy();
   }
 }

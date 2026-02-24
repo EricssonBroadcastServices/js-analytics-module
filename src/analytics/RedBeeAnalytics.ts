@@ -64,6 +64,7 @@ export interface IRedBeeAnalyticsOptions {
   analyticsBaseUrl: string;
   device: IDeviceInfo;
   debug?: boolean;
+  sessionId?: string;
 }
 
 export class RedBeeAnalytics {
@@ -92,6 +93,7 @@ export class RedBeeAnalytics {
     analyticsBaseUrl,
     device,
     debug,
+    sessionId,
   }: IRedBeeAnalyticsOptions) {
     if (!customer || !businessUnit) {
       throw new Error("No Customer or BusinessUnit defined");
@@ -124,6 +126,7 @@ export class RedBeeAnalytics {
       TechVersion: "",
       StreamingTechnology: "",
     };
+    this.init(sessionId);
   }
 
   private async _send(payloadQuene: IPayload[]): Promise<boolean> {
@@ -177,7 +180,7 @@ export class RedBeeAnalytics {
     this.eventPool = undefined;
   }
 
-  async init(sessionId?: string): Promise<boolean> {
+  init(sessionId?: string): boolean {
     if (!this.customerSpecificBaseUrl) {
       throw new Error("[RedBeeAnalytics] analyticsBaseUrl was never set");
     }
@@ -188,7 +191,11 @@ export class RedBeeAnalytics {
     this.logger.debug("init", sessionId);
     this.clear();
     this.sessionId = sessionId;
-    this.eventPool = new EventPool(sessionId, this.logger);
+    this.eventPool = new EventPool(
+      sessionId,
+      this.logger,
+      this.playerFields.AnalyticsPostInterval,
+    );
     this.eventPool.on(EVENT_POOL_SEND, this._send.bind(this));
     return true;
   }
@@ -229,7 +236,6 @@ export class RedBeeAnalytics {
 
   created({
     assetId,
-    analyticsPostInterval,
     deviceModel,
     deviceModelNumber,
     deviceStats,
@@ -246,10 +252,6 @@ export class RedBeeAnalytics {
     this.device.model = deviceModel || this.device.model;
     this.device.deviceStats = deviceStats || {};
     this.device.modelNumber = deviceModelNumber || this.device.modelNumber;
-
-    if (analyticsPostInterval) {
-      this.eventPool?.updateInterval(analyticsPostInterval);
-    }
 
     this.deviceInfoEvent();
   }
@@ -316,4 +318,3 @@ export class RedBeeAnalytics {
     this.clear();
   }
 }
-// old analytics https://github.com/ericssonbroadcastservices/emp-analytics
