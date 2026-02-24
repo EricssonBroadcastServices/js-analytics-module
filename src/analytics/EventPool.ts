@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 2026 Red Bee Media Ltd <https://www.redbeemedia.com/\>
+//
+// SPDX-License-Identifier: MIT
+
 import { Logger } from "../utils/Logger";
 import { EmitterBaseClass } from "./EmitterBaseClass";
 import { isWebEnvironment } from "../utils/helpers";

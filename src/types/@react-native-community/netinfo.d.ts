@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 2026 Red Bee Media Ltd <https://www.redbeemedia.com/\>
+//
+// SPDX-License-Identifier: MIT
+
 // Type declarations for @react-native-community/netinfo
 // This is a peer dependency, so types are provided by the package itself
 // This file is only needed for TypeScript compilation

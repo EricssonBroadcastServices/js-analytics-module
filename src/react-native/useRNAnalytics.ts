@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 2026 Red Bee Media Ltd <https://www.redbeemedia.com/\>
+//
+// SPDX-License-Identifier: MIT
+
 import { AnalyticsRNProps, ExtraEvents, PlayerEvent } from "../types/types";
 import { RedBeeAnalytics } from "../analytics/RedBeeAnalytics";
 import { useMemo, useEffect } from "react";

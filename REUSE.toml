@@ -1,0 +1,18 @@
+version = 1
+
+[[annotations]]
+path = [
+  ".npmrc",
+  ".prettierrc.json",
+  "eslint.config.mts",
+  "package.json",
+  "tsconfig.build.json",
+  "tsconfig.json"
+]
+SPDX-FileCopyrightText = "2026 Red Bee Media Ltd <https://www.redbeemedia.com/>"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "package-lock.json"
+SPDX-FileCopyrightText = "NONE"
+SPDX-License-Identifier = "CC0-1.0"

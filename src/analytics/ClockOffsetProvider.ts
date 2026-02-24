@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 2026 Red Bee Media Ltd <https://www.redbeemedia.com/\>
+//
+// SPDX-License-Identifier: MIT
+
 import { getTimeAnonymous } from "@ericssonbroadcastservices/rbm-ott-sdk";
 
 const SYNC_INTERVAL_MS = 30 * 60 * 1000; // 30 minutes

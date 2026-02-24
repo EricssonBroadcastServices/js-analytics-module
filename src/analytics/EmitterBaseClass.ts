@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 2026 Red Bee Media Ltd <https://www.redbeemedia.com/\>
+//
+// SPDX-License-Identifier: MIT
+
 import mitt, { Emitter, Handler, WildcardHandler } from "mitt";
 
 type EventHelper<T> = { [K in keyof T]: { event: K; data: T[K] } };
