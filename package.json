@@ -1,13 +1,14 @@
 {
   "name": "@ericssonbroadcastservices/js-analytics-module",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "type": "commonjs",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "react-native": "./dist/index.js",
   "scripts": {
     "custom-publish": "npm publish",
-    "build": "tsc -p tsconfig.build.json",
+    "generate:version": "node scripts/generate-version.cjs",
+    "build": "npm run generate:version && tsc -p tsconfig.build.json",
     "clean": "rm -rf dist",
     "lint": "npx eslint .",
     "prepublishOnly": "npm run clean && npm run build"

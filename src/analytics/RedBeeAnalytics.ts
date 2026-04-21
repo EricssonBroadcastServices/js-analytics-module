@@ -9,6 +9,7 @@ import { EVENT_POOL_SEND, EventPool, IPayload } from "./EventPool";
 import { PlayerEvent } from "../types/types";
 import { isWebEnvironment } from "../utils/helpers";
 import { NetInfoStateType } from "@react-native-community/netinfo";
+import { SDK_VERSION } from "../version";
 
 const DEFAULT_HEADERS = {
   "content-type": "application/json",
@@ -126,7 +127,7 @@ export class RedBeeAnalytics {
     this.playerFields = {
       Player: "",
       Version: "",
-      Technology: "",
+      Technology: "Bitmovin",
       TechVersion: "",
       StreamingTechnology: "",
     };
@@ -225,7 +226,7 @@ export class RedBeeAnalytics {
       TotalNumberOfDroppedFrames: 0,
       Player: this.playerFields.Player,
       Version: this.playerFields.Version,
-      Technology: this.playerFields.Technology,
+      PlayerTechnology: this.playerFields.Technology,
       TechVersion: this.playerFields.TechVersion,
       StreamingTechnology: this.playerFields.StreamingTechnology,
       CDNVendor: this.playerFields.CDNVendor,
@@ -311,6 +312,7 @@ export class RedBeeAnalytics {
   getDefaultFields() {
     return {
       Timestamp: Date.now(),
+      SdkVersion: SDK_VERSION,
     };
   }
 
