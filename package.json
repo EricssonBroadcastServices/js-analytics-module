@@ -7,7 +7,8 @@
   "react-native": "./dist/index.js",
   "scripts": {
     "custom-publish": "npm publish",
-    "build": "tsc -p tsconfig.build.json",
+    "generate:version": "node scripts/generate-version.cjs",
+    "build": "npm run generate:version && tsc -p tsconfig.build.json",
     "clean": "rm -rf dist",
     "lint": "npx eslint .",
     "prepublishOnly": "npm run clean && npm run build"
