@@ -226,7 +226,6 @@ export class RedBeeAnalytics {
       TotalNumberOfDroppedFrames: 0,
       Player: this.playerFields.Player,
       Version: this.playerFields.Version,
-      PlayerTechnology: this.playerFields.Technology,
       TechVersion: this.playerFields.TechVersion,
       StreamingTechnology: this.playerFields.StreamingTechnology,
       CDNVendor: this.playerFields.CDNVendor,
@@ -313,6 +312,7 @@ export class RedBeeAnalytics {
     return {
       Timestamp: Date.now(),
       SdkVersion: SDK_VERSION,
+      PlayerTechnology: this.playerFields.Technology,
     };
   }
 
