@@ -10,6 +10,7 @@ import { PlayerEvent } from "../types/types";
 import { isWebEnvironment } from "../utils/helpers";
 import { NetInfoStateType } from "@react-native-community/netinfo";
 import { SDK_VERSION } from "../version";
+import { PlayerEventBase } from "bitmovin-player";
 
 const DEFAULT_HEADERS = {
   "content-type": "application/json",
@@ -262,20 +263,25 @@ export class RedBeeAnalytics {
 
   runEvent({
     eventType,
+    event,
   }: {
     eventType: PlayerEvent | ExtraEvents;
     startTime?: number;
+    event?: PlayerEventBase;
   }): void {
     if (!this.isActive()) {
       return;
     }
     this.logger.debug("[Event]: " + eventType, this.sessionId);
+    this.logger.debug("[Event event]: ", event);
 
     const payload = {
       EventType: eventType,
       ...this.getDefaultFields(),
+      ...(event ? { PlaybackPosition: event.time } : {}),
     };
 
+    this.logger.debug("[Event payload]: " + eventType, this.sessionId, payload);
     this.eventPool?.add(payload);
   }
 
