@@ -8,6 +8,7 @@ import { useMemo, useEffect } from "react";
 import { CallbackMap } from "./types";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { AppState } from "react-native";
+import { PlayerEventBase } from "bitmovin-player";
 
 const allPossibleCallbacks: (keyof CallbackMap)[] = [
   "onAdBreakFinished",
@@ -139,7 +140,10 @@ export const useRNAnalytics = ({
 
       callbacks[key] = (...args: unknown[]) => {
         if (eventsWithPlaybackPosition.includes(eventType)) {
-          redBeeAnalytics.runEvent({ eventType, event: args[0] });
+          redBeeAnalytics.runEvent({
+            eventType,
+            event: args[0] as PlayerEventBase,
+          });
         } else {
           redBeeAnalytics.runEvent({ eventType });
         }

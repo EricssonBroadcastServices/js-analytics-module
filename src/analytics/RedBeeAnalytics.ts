@@ -278,7 +278,7 @@ export class RedBeeAnalytics {
     const payload = {
       EventType: eventType,
       ...this.getDefaultFields(),
-      ...(event ? { PlaybackPosition: event.time } : {}),
+      ...(event ? { PlaybackPosition: (event as any).time } : {}),
     };
 
     this.logger.debug("[Event payload]: " + eventType, this.sessionId, payload);
