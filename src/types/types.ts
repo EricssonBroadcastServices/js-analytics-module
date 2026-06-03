@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT
 
-import { PlayerAPI } from "bitmovin-player";
+import type { PlayerAPI } from "bitmovin-player";
 import { IRedBeeAnalyticsOptions } from "../analytics/RedBeeAnalytics";
 import { CallbackMap } from "../react-native/types";
 

@@ -5,6 +5,7 @@
 import { AnalyticsWebProps, PlayerEvent } from "../types/types";
 import { RedBeeAnalytics } from "../analytics/RedBeeAnalytics";
 import { useCallback, useEffect, useMemo } from "react";
+import { PlayerEventBase } from "bitmovin-player";
 
 export const webAnalytics = ({
   options,
@@ -233,12 +234,20 @@ export const useWebAnalytics = ({
 }: AnalyticsWebProps) => {
   const redBeeAnalytics = useMemo(
     () => new RedBeeAnalytics(options),
-    [options],
+    [
+      options.customer,
+      options.businessUnit,
+      options.sessionToken,
+      options.analyticsBaseUrl,
+      options.debug,
+      options.sessionId,
+    ],
   );
   const sendEvent = useCallback(
-    (eventType: PlayerEvent) => {
+    (eventType: PlayerEvent, event?: PlayerEventBase) => {
       redBeeAnalytics.runEvent({
         eventType,
+        event,
       });
     },
     [redBeeAnalytics],
@@ -293,8 +302,8 @@ export const useWebAnalytics = ({
       player.on(PlayerEvent.DVRWindowExceeded, () => {
         sendEvent(PlayerEvent.DVRWindowExceeded);
       });
-      player.on(PlayerEvent.Destroy, () => {
-        sendEvent(PlayerEvent.Destroy);
+      player.on(PlayerEvent.Destroy, (event) => {
+        sendEvent(PlayerEvent.Destroy, event);
       });
       player.on(PlayerEvent.DrmLicenseAdded, () => {
         sendEvent(PlayerEvent.DrmLicenseAdded);
@@ -314,29 +323,29 @@ export const useWebAnalytics = ({
       player.on(PlayerEvent.OverlayAdStarted, () => {
         sendEvent(PlayerEvent.OverlayAdStarted);
       });
-      player.on(PlayerEvent.Paused, () => {
-        sendEvent(PlayerEvent.Paused);
+      player.on(PlayerEvent.Paused, (event) => {
+        sendEvent(PlayerEvent.Paused, event);
       });
-      player.on(PlayerEvent.Play, () => {
-        sendEvent(PlayerEvent.Play);
+      player.on(PlayerEvent.Play, (event) => {
+        sendEvent(PlayerEvent.Play, event);
       });
-      player.on(PlayerEvent.PlaybackFinished, () => {
-        sendEvent(PlayerEvent.PlaybackFinished);
+      player.on(PlayerEvent.PlaybackFinished, (event) => {
+        sendEvent(PlayerEvent.PlaybackFinished, event);
       });
       player.on(PlayerEvent.PlaybackSpeedChanged, () => {
         sendEvent(PlayerEvent.PlaybackSpeedChanged);
       });
-      player.on(PlayerEvent.Playing, () => {
-        sendEvent(PlayerEvent.Playing);
+      player.on(PlayerEvent.Playing, (event) => {
+        sendEvent(PlayerEvent.Playing, event);
       });
       player.on(PlayerEvent.Ready, () => {
         sendEvent(PlayerEvent.Ready);
       });
-      player.on(PlayerEvent.Seek, () => {
-        sendEvent(PlayerEvent.Seek);
+      player.on(PlayerEvent.Seek, (event) => {
+        sendEvent(PlayerEvent.Seek, event);
       });
-      player.on(PlayerEvent.Seeked, () => {
-        sendEvent(PlayerEvent.Seeked);
+      player.on(PlayerEvent.Seeked, (event) => {
+        sendEvent(PlayerEvent.Seeked, event);
       });
       player.on(PlayerEvent.SourceLoaded, () => {
         sendEvent(PlayerEvent.SourceLoaded);
@@ -353,8 +362,8 @@ export const useWebAnalytics = ({
       player.on(PlayerEvent.SubtitleEnabled, () => {
         sendEvent(PlayerEvent.SubtitleEnabled);
       });
-      player.on(PlayerEvent.TimeChanged, () => {
-        sendEvent(PlayerEvent.TimeChanged);
+      player.on(PlayerEvent.TimeChanged, (event) => {
+        sendEvent(PlayerEvent.TimeChanged, event);
       });
       player.on(PlayerEvent.TimeShifted, () => {
         sendEvent(PlayerEvent.TimeShifted);

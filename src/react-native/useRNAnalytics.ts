@@ -41,6 +41,17 @@ const allPossibleCallbacks: (keyof CallbackMap)[] = [
   "onPlayerWarning",
 ];
 
+const eventsWithPlaybackPosition = [
+  PlayerEvent.TimeChanged,
+  PlayerEvent.Seeked,
+  PlayerEvent.Play,
+  PlayerEvent.Seek,
+  PlayerEvent.Destroy,
+  PlayerEvent.Paused,
+  PlayerEvent.PlaybackFinished,
+  PlayerEvent.Playing,
+];
+
 const callbackToEventMap: Record<keyof CallbackMap, PlayerEvent> = {
   onAdBreakFinished: PlayerEvent.AdBreakFinished,
   onAdBreakStarted: PlayerEvent.AdBreakStarted,
@@ -127,7 +138,11 @@ export const useRNAnalytics = ({
       const eventType = callbackToEventMap[key];
 
       callbacks[key] = (...args: unknown[]) => {
-        redBeeAnalytics.runEvent({ eventType });
+        if (eventsWithPlaybackPosition.includes(eventType)) {
+          redBeeAnalytics.runEvent({ eventType, event: args[0] });
+        } else {
+          redBeeAnalytics.runEvent({ eventType });
+        }
 
         if (callback && typeof callback === "function") {
           return callback(...args);
