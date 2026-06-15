@@ -4,7 +4,7 @@
 
 import { AnalyticsRNProps, ExtraEvents, PlayerEvent } from "../types/types";
 import { RedBeeAnalytics } from "../analytics/RedBeeAnalytics";
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useRef } from "react";
 import { CallbackMap } from "./types";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { AppState } from "react-native";
@@ -52,6 +52,28 @@ const eventsWithPlaybackPosition = [
   PlayerEvent.PlaybackFinished,
   PlayerEvent.Playing,
 ];
+
+const getPlaybackPosition = (
+  eventType: PlayerEvent,
+  event?: PlayerEventBase,
+): number | undefined => {
+  if (!event) {
+    return undefined;
+  }
+  const e = event as {
+    time?: number;
+    currentTime?: number;
+    to?: { time?: number };
+  };
+  switch (eventType) {
+    case PlayerEvent.TimeChanged:
+      return e.currentTime;
+    case PlayerEvent.Seek:
+      return e.to?.time;
+    default:
+      return e.time;
+  }
+};
 
 const callbackToEventMap: Record<keyof CallbackMap, PlayerEvent> = {
   onAdBreakFinished: PlayerEvent.AdBreakFinished,
@@ -131,6 +153,8 @@ export const useRNAnalytics = ({
     };
   }, []);
 
+  const lastSeekTargetRef = useRef<number | undefined>(undefined);
+
   const wrappedCalbacks = useMemo(() => {
     const callbacks: CallbackMap = {};
 
@@ -140,9 +164,25 @@ export const useRNAnalytics = ({
 
       callbacks[key] = (...args: unknown[]) => {
         if (eventsWithPlaybackPosition.includes(eventType)) {
+          const event = args[0] as PlayerEventBase;
+
+          if (eventType === PlayerEvent.Seek) {
+            lastSeekTargetRef.current = (
+              event as { to?: { time?: number } }
+            ).to?.time;
+          }
+
+          let PlaybackPosition: number | undefined;
+          if (eventType === PlayerEvent.Seeked) {
+            PlaybackPosition = lastSeekTargetRef.current;
+            lastSeekTargetRef.current = undefined;
+          } else {
+            PlaybackPosition = getPlaybackPosition(eventType, event);
+          }
           redBeeAnalytics.runEvent({
             eventType,
-            event: args[0] as PlayerEventBase,
+            event,
+            playbackPosition: PlaybackPosition,
           });
         } else {
           redBeeAnalytics.runEvent({ eventType });
