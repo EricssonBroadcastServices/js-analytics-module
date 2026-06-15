@@ -264,10 +264,12 @@ export class RedBeeAnalytics {
   runEvent({
     eventType,
     event,
+    playbackPosition,
   }: {
     eventType: PlayerEvent | ExtraEvents;
     startTime?: number;
     event?: PlayerEventBase;
+    playbackPosition?: number;
   }): void {
     if (!this.isActive()) {
       return;
@@ -278,7 +280,9 @@ export class RedBeeAnalytics {
     const payload = {
       EventType: eventType,
       ...this.getDefaultFields(),
-      ...(event ? { PlaybackPosition: (event as any).time } : {}),
+      ...(playbackPosition !== undefined
+        ? { PlaybackPosition: playbackPosition }
+        : {}),
     };
 
     this.logger.debug("[Event payload]: " + eventType, this.sessionId, payload);
