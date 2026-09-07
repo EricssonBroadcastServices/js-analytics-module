@@ -1,6 +1,6 @@
 {
-  "name": "@ericssonbroadcastservices/js-analytics-module",
-  "version": "0.1.10",
+  "name": "@ericssonbroadcastservices/redbee-analytics-bitmovin",
+  "version": "1.0.0",
   "type": "commonjs",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
